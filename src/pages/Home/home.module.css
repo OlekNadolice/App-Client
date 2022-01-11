@@ -1,0 +1,46 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 280px));
+
+  justify-content: center;
+  gap: 15px;
+  min-height: calc(77vh - 60px);
+}
+
+.home {
+  padding: clamp(10px, 10vw, 50px);
+}
+
+.style {
+  align-self: center;
+
+  display: flex;
+  justify-content: center;
+  grid-column: 1/-1;
+}
+
+.paginationButtons {
+  display: flex;
+  justify-content: center;
+  height: 40px;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.paginationButtons a {
+  display: inline-block;
+  border: 1px solid #803939;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.btn {
+  color: #803939;
+  cursor: pointer;
+}
+
+.active {
+  background-color: #803939;
+  color: #fff;
+}

@@ -1,0 +1,46 @@
+.reviewsBox {
+  border: 1px solid gray;
+  color: #444;
+  background-color: #fff;
+  border-top-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+  transition: 0.4s linear;
+}
+
+.reviewsBoxImg {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.reviewsBox > div {
+  margin-top: 10px;
+  display: flex;
+  gap: 15px;
+
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reviewsBox > div > h1 {
+  font-weight: 600;
+  color: rgb(158, 26, 26);
+  font-size: 20px;
+}
+
+.reviewsBox > q {
+  font-size: clamp(14px, 2.5vw, 18px);
+
+  line-height: 1.4;
+  color: #444;
+}
+
+@media (min-width: 1200px) {
+  .reviewsBox:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+}

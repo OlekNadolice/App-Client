@@ -1,0 +1,105 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  min-height: 100vh;
+}
+
+form {
+  height: 100vh;
+  gap: 13px;
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+form h2 {
+  color: rgb(158, 28, 28);
+
+  font-size: clamp(45px, 10vw, 61px);
+  letter-spacing: -3px;
+  font-weight: 800;
+  transform: translateY(15px);
+}
+
+form div {
+  border: 1px solid rgb(94, 90, 90);
+  border-radius: 10px;
+  padding: 5px 12px;
+  display: flex;
+}
+
+form label {
+  font-weight: 600;
+  font-size: 18px;
+
+  color: #444;
+  text-transform: uppercase;
+}
+
+form input {
+  border: none;
+}
+
+form input:focus {
+  outline: none;
+}
+
+form button {
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 600;
+  background-color: hsl(0, 38%, 36%);
+  padding: 10px 25px;
+  cursor: pointer;
+  border: none;
+  font-size: 16px;
+  text-transform: uppercase;
+  /* max-width: 260px; */
+  width: 240px;
+}
+
+.paragraph {
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: -1px;
+  color: #444;
+  display: inline;
+}
+
+form a {
+  text-decoration: none;
+  margin-top: -10px;
+  color: #444;
+  font-size: 16px;
+  margin-left: 8px;
+  color: rgb(158, 28, 28);
+}
+
+.logo {
+  filter: invert(25%) sepia(36%) saturate(38%) hue-rotate(100deg) brightness(36%)
+    contrast(103%);
+  height: 150px;
+}
+
+form input:autofill {
+  background: #fff;
+}
+
+.icon {
+  font-size: 20px;
+  color: rgb(158, 28, 28);
+}
+
+.error {
+  font-size: 16px;
+  font-weight: 600;
+  color: #d8000c;
+}
+
+.succes {
+  font-size: 16px;
+  font-weight: 600;
+  color: #4bb543;
+}

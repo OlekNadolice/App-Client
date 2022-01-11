@@ -1,0 +1,30 @@
+.container {
+  /* background-color: orange; */
+  padding: clamp(10px, 10vw, 30px) clamp(10px, 10vw, 150px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.friendBox {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  border: 1px solid gray;
+  padding: 20px;
+  /* background-color: red; */
+  max-width: 600px;
+  min-width: 270px;
+}
+
+.friendBox > h3 {
+  font-weight: 400;
+}
+
+.friendBox img {
+  width: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  height: 120px;
+  order: -1;
+}

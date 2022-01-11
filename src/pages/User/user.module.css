@@ -1,0 +1,67 @@
+.container,
+.containerLoading {
+  min-height: calc(90vh - 50px);
+}
+
+.containerLoading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  padding: clamp(10px, 10vw, 60px) clamp(10px, 10vw, 300px);
+  /* background-color: green; */
+}
+
+.container article {
+  /* background-color: red; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.sectionLeft > img {
+  border-radius: 50%;
+  object-fit: cover;
+  width: clamp(100px, 10vw, 150px);
+  height: clamp(100px, 10vw, 150px);
+}
+
+.userHeader {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 7vw, 80px);
+  /* background-color: blue; */
+  justify-content: center;
+  flex-wrap: wrap;
+  border-bottom: 1px solid gray;
+}
+
+.sectionRight > h1 {
+  font-weight: 600;
+  font-size: clamp(16px, 5vw, 22px);
+}
+
+.sectionRight > h4 {
+  font-weight: 500;
+  font-size: clamp(14px, 5vw, 18px);
+}
+
+.sectionRight > button {
+  display: block;
+}
+
+.sectionRightNav > a {
+  text-decoration: none;
+  color: #444;
+}
+
+.sectionRightNav > a:not(a:nth-of-type(1)) {
+  margin-left: 15px;
+}
+
+.sectionRightNav {
+  margin-top: 10px;
+}

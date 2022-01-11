@@ -1,0 +1,18 @@
+.paragraph {
+  font-weight: 600;
+  font-size: 15px;
+  color: #444;
+  display: inline;
+}
+
+.succes {
+  color: #4bb543;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.error {
+  font-size: 16px;
+  font-weight: 600;
+  color: #d8000c;
+}
