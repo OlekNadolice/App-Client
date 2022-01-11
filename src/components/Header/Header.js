@@ -1,11 +1,14 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { authContext } from "../../context/AuthContext";
 import styles from "./header.module.css";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { IoMdClose } from "react-icons/io";
 
 function Header() {
   const { setIsLoggedIn, setToken, userImage } = useContext(authContext);
   const userName = localStorage.getItem("name");
+  const [active, setActive] = useState(false);
   // const userImage = localStorage.getItem("profileImage");
   const logoutHandler = e => {
     e.preventDefault();
@@ -22,7 +25,13 @@ function Header() {
         <img src={userImage && userImage} alt="person" className={styles.profileImage} />
         <h3 className={styles.profileInfo__title}>{userName}</h3>
       </div>
-      <nav>
+
+      {!active ? (
+        <GiHamburgerMenu className={styles.iconMenu} onClick={() => setActive(!active)} />
+      ) : (
+        <IoMdClose className={styles.iconMenu} onClick={() => setActive(!active)} />
+      )}
+      <nav className={active ? styles.isActive : styles.notActive}>
         <NavLink to="/home" className={props => (props.isActive ? styles.active : null)}>
           Home
         </NavLink>

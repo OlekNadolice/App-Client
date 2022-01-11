@@ -8,9 +8,10 @@ const useQuery = (url, obj) => {
   useEffect(() => {
     setLoading(true);
     let componentMounted = true;
+
     fetch(url, (obj = null))
       .then(response => response.json())
-      .then(data => setData(data))
+      .then(data => componentMounted && setData(data))
       .catch(err => componentMounted && setError(err))
       .finally(() => componentMounted && setLoading(false));
 

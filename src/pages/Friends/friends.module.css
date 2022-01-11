@@ -2,29 +2,46 @@
   /* background-color: orange; */
   padding: clamp(10px, 10vw, 30px) clamp(10px, 10vw, 150px);
   display: flex;
+  justify-content: flex-start;
+  /* height: 400px; */
+  /* overflow-y: scroll; */
+  scrollbar-width: none;
   flex-wrap: wrap;
   gap: 15px;
 }
 
 .friendBox {
   display: flex;
+  padding: 10px;
+  gap: 25px;
   align-items: center;
-  gap: 30px;
-  border: 1px solid gray;
-  padding: 20px;
-  /* background-color: red; */
+  background-color: #fcfcfc;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 5px 15px;
   max-width: 600px;
-  min-width: 270px;
+  min-width: 250px;
+  height: 100px;
 }
 
-.friendBox > h3 {
+.friendBox div > h3 {
   font-weight: 400;
+  text-transform: capitalize;
 }
 
 .friendBox img {
-  width: 120px;
   object-fit: cover;
   border-radius: 50%;
-  height: 120px;
+  width: clamp(80px, 10vw, 90px);
+  height: clamp(80px, 10vw, 90px);
   order: -1;
+}
+
+.friendBox > div > a {
+  text-decoration: none;
+  color: #444;
+  font-size: 14px;
+  display: block;
+  background-color: #803939;
+  color: #fff;
+  padding: 2.5px 10px;
+  margin-top: 5px;
 }
