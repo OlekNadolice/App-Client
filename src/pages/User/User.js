@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Link, Outlet } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import classes from "./user.module.css";
 import useQuery from "../../hooks/useQuery";
 function User() {
   const { id } = useParams();
+  const [action, setAction] = useState(false);
 
   const {
     data: user,
@@ -16,9 +17,46 @@ function User() {
     },
   });
 
+  const sendFriendRequestHandler = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/auth/sendRequest", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ targetID: id }),
+      });
+      const data = await response.json();
+      setAction(true);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const deleteFriendHandler = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/auth/deleteFriend", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ targetID: id }),
+      });
+      const data = await response.json();
+      setAction(true);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     if (user) {
       document.title = user.data.name;
+      console.log(user.data);
     }
 
     return () => {
@@ -38,7 +76,14 @@ function User() {
             <div className={classes.sectionRight}>
               <h1>{name}</h1>
               <h4>{city}</h4>
-              <button>Follow</button>
+              {user.data._id !== localStorage.getItem("id") &&
+                !user.data.friends.includes(`${localStorage.getItem("id")}`) &&
+                !action && <button onClick={sendFriendRequestHandler}>Add Friend</button>}
+
+              {user.data._id !== localStorage.getItem("id") &&
+                user.data.friends.includes(`${localStorage.getItem("id")}`) &&
+                !action && <button onClick={deleteFriendHandler}>Delete </button>}
+
               <div className={classes.sectionRightNav}>
                 <Link to={`/users/${id}/friends`}>Friends</Link>
                 <Link to={`/users/${id}/posts`}>Posts</Link>
