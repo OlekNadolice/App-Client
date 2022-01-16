@@ -1,29 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import UserCard from "../../components/UserCard/UserCard";
 import useQuery from "../../hooks/useQuery";
 import classes from "./home.module.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import ReactPaginate from "react-paginate";
-
+import { authContext } from "../../context/AuthContext";
 function Home() {
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
   const limit = 8;
 
+  const { setToken, setIsLoggedIn, token } = useContext(authContext);
+
   const {
     data: users,
     error,
     loading,
-  } = useQuery(`http://127.0.0.1:8000/auth/users?page=${page}`);
+  } = useQuery(`http://127.0.0.1:8000/auth/users?page=${page}`, {
+    headers: {
+      authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
 
   useEffect(() => {
     document.title = "Home";
     users && setCount(users.count);
 
+    error && error.message === "403" && setToken("");
+    error && error.message === "403" && setIsLoggedIn(false);
+
     return () => {
       document.title = "";
     };
-  }, [users]);
+  }, [users, error]);
 
   return (
     <div className={classes.home}>
@@ -35,6 +44,7 @@ function Home() {
         )}
 
         {users &&
+          !loading &&
           users.data.length >= 1 &&
           users.data.map(element => {
             return (
@@ -55,7 +65,7 @@ function Home() {
           breakLabel="..."
           nextLabel="next >"
           onPageChange={e => setPage(e.selected + 1)}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={3}
           pageCount={Math.ceil(count / limit)}
           previousLabel="< previous"
           containerClassName={classes.paginationButtons}
