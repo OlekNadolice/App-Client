@@ -1,0 +1,76 @@
+.container {
+  height: 100%;
+  padding: 25px;
+  padding-top: 45px;
+  width: 100%;
+}
+
+.requestFriendComponent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* flex-wrap: wrap; */
+
+  gap: 20px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  padding: 10px;
+}
+
+.requestFriendComponent:not(.requestFriendComponent:nth-of-type(1)) {
+  margin-top: 10px;
+}
+
+.requestFriendComponent > div > img {
+  border-radius: 50%;
+  height: clamp(60px, 10vw, 65px);
+  width: clamp(60px, 10vw, 65px);
+}
+
+.requestFriendComponent > div > h3 {
+  font-weight: 600;
+  font-size: clamp(16px, 2.5vw, 16px);
+  color: #444;
+}
+
+.requestFriendComponent button {
+  background-color: #803939;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  width: clamp(60px, 7.5vw, 80px);
+
+  height: 30px;
+}
+
+.btnContainer {
+  display: flex;
+
+  gap: 5px;
+}
+
+.containerInfo {
+  display: flex;
+  gap: 7.5px;
+  align-items: center;
+}
+
+.spinnerContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.noContentContainer {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 688px) {
+  .requestFriendComponent {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-bottom: 20px;
+  }
+}
