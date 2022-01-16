@@ -14,9 +14,11 @@ import Posts from "./pages/Posts/Posts";
 import Info from "./pages/Info/Info";
 import NotFounds from "./pages/NotFound/NotFounds";
 import { authContext } from "./context/AuthContext";
+import Chat from "./pages/Chat/Chat";
 import React from "react";
 function App() {
   const { isLoggedIn } = useContext(authContext);
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -44,6 +46,7 @@ function App() {
             <Route path="/users/:id/posts" element={<Posts />} />
             <Route path="/users/:id/info" element={<Info />} />
           </Route>
+          <Route path="/chat" element={isLoggedIn ? <Chat /> : <Navigate to="login" />} />
 
           <Route
             path="*"
