@@ -2,12 +2,13 @@ import React, { useState } from "react";
 
 const useFetch = () => {
   const [error, setError] = useState("");
-  return async (url, obj) => {
+  return async (url, obj, auth) => {
     try {
       const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: auth,
         },
         body: JSON.stringify(obj),
       });
