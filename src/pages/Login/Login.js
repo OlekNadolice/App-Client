@@ -36,12 +36,13 @@ function Login() {
 
       if (response.status === 201) {
         localStorage.setItem("token", response.token);
-        const { name, profileImage } = response.data;
+        const { name, profileImage, id } = response.data;
         localStorage.setItem("name", name);
         localStorage.setItem(
           "profileImage",
           `http://localhost:8000/images/${profileImage}`
         );
+        localStorage.setItem("id", id);
         setToken(response.token);
         setIsLoggedIn(true);
         setUserImage(localStorage.getItem("profileImage"));
