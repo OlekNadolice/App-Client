@@ -1,25 +1,150 @@
 .chatContainer {
   height: calc(100vh - 140px);
-  /* background-color: red; */
+
   display: flex;
+  width: 100%;
 }
 
 .sidebar {
   height: 100%;
-  width: 250px;
-  box-shadow: 0px 0px 2.5px rgba(0, 0, 0, 0.35);
+  width: 180px;
+
   overflow-y: scroll;
+  border: 1px solid gray;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.sidebar > h2 {
+.sidebar > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+
+  padding: 10px 15px;
+
+  gap: 5px;
+  width: 100%;
+}
+
+/* .sidebar > div:nth-of-type(3) {
+  background-color: rgb(185, 110, 110);
+  color: #fff;
+} */
+
+.sidebar div > h2 {
   font-weight: 500;
-  font-size: 16px;
-  padding: 10px 50px;
+  font-size: clamp(10px, 2.5vw, 18px);
+  text-transform: capitalize;
+}
+
+.sidebar > div > img {
+  border-radius: 50%;
+  width: clamp(45px, 10vw, 55px);
+  height: clamp(45px, 10vw, 55px);
 }
 
 .chat {
-  width: calc(100% - 250px);
-
-  overflow-y: scroll;
+  /* width: calc(100% - 250px); */
   /* background-color: red; */
+  overflow-y: scroll;
+  width: calc(100% - 180px);
+  height: 100%;
+}
+
+.chatMessages {
+  height: 85%;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 30px clamp(10px, 10%, 100px);
+}
+
+.chatMessages > h1 {
+  font-weight: 500;
+  font-size: clamp(10px, 5vw, 20px);
+  background-color: #f0f2f5;
+  cursor: pointer;
+
+  border-radius: 10px;
+  padding: 5px 24px;
+  align-self: flex-end;
+  inline-size: clamp(100px, 70vw, 300px);
+  overflow-wrap: break-word;
+}
+
+.chatMessages > .me {
+  background-color: #994343;
+  color: #fff;
+  align-self: flex-start;
+}
+
+.chatMessages > h1:not(.chatMessages > h1:nth-of-type(1)) {
+  margin-top: 7.5px;
+}
+
+.chatForm {
+  height: 15%;
+  background-color: red;
+  display: flex;
+}
+
+.formInput {
+  outline: none;
+  height: 100%;
+  /* background-color: red; */
+  resize: none;
+  width: 90%;
+}
+
+.online {
+  color: green;
+}
+
+.chatForm > button {
+  cursor: pointer;
+
+  height: 100%;
+  outline: none;
+  border: none;
+  font-weight: 700;
+  width: 10%;
+
+  color: #444;
+}
+
+@media (max-width: 668px) {
+  .chatContainer {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: 100px;
+    flex-direction: row;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    gap: 30px;
+    scrollbar-width: none;
+  }
+
+  .chatForm > button {
+    width: 20%;
+  }
+
+  .chatForm > input {
+    width: 80%;
+  }
+
+  .chatMessages {
+    width: 100%;
+  }
+
+  .chat {
+    width: 100%;
+    height: calc(100% - 100px);
+  }
 }
