@@ -1,14 +1,40 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import classes from "./chat.module.css";
 import useQuery from "../../hooks/useQuery";
-import socketIOClient from "socket.io-client";
+import { io } from "socket.io-client";
+
+// const socket = io("http://127.0.0.1:8000", {
+//   query: {
+//     user: localStorage.getItem("id"),
+//   },
+//   autoConnect: false,
+
+// });
+
 const Chat = () => {
   const [users, setUsers] = useState([]);
   const messageInput = useRef("");
   const [message, setMessage] = useState([]);
   const [currentUser, setCurrentUser] = useState("");
+  const socket = useMemo(
+    () =>
+      io("http://127.0.0.1:8000", {
+        query: {
+          user: localStorage.getItem("id"),
+        },
+        autoConnect: false,
+      }),
+    []
+  );
 
-  const socket = socketIOClient("http://127.0.0.1:8000");
+  useEffect(() => {
+    socket.connect();
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
   const { data, loading, error } = useQuery("http://localhost:8000/messenger/", {
     headers: {
       authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -17,23 +43,51 @@ const Chat = () => {
 
   useEffect(() => {
     data && setUsers(data.data.friends);
+    data && socket.emit("active", { id: localStorage.getItem("id") });
+    console.log("renderuje sie typie znowu..");
   }, [data]);
 
   useEffect(() => {
-    socket.on("connect", () => console.log("Podlaczony"));
-    socket.on("message", message => setMessage(prevState => [...prevState, message]));
-    socket.emit("newUser", { id: localStorage.getItem("id") });
+    socket.on("message", message => {
+      if (message.author === currentUser) {
+        setMessage(prevState => [
+          ...prevState,
+          { text: message.message, author: message.author },
+        ]);
+      }
+    });
 
-    socket.on("findChat", data =>
-      setMessage(
-        data.map(e => {
-          return [e.text];
-        })
-      )
-    );
+    socket.on("findChat", data => {
+      console.log("mamy chat");
+      if (!data) {
+        setMessage([]);
+        console.log("nie ma czatu ale dziala");
+      }
+      data &&
+        setMessage(
+          data.map(e => {
+            return { text: e.text, author: e.author };
+          })
+        );
+    });
 
-    // return () => socket.emmit("disconnect", { id: localStorage.getItem("id") });
-  }, []);
+    socket.on("active", data => {
+      if (data.length > 0) {
+        const activeUsers = data.map(e => e.id);
+        const updatedUsers = users.map(e => {
+          if (activeUsers.includes(e._id)) {
+            return (e = { ...e, online: true });
+          } else {
+            return (e = { ...e });
+          }
+        });
+        console.log("renderuje ciagle");
+        setUsers([...updatedUsers]);
+      }
+    });
+
+    // return () => socket.removeAllListeners();
+  });
 
   const sentMessage = async () => {
     console.log(currentUser);
@@ -42,6 +96,10 @@ const Chat = () => {
       id: localStorage.getItem("id"),
       target: currentUser,
     });
+    setMessage(prevState => [
+      ...prevState,
+      { text: messageInput.current.value, author: localStorage.getItem("id") },
+    ]);
     messageInput.current.value = "";
   };
 
@@ -66,17 +124,30 @@ const Chat = () => {
                   src={`http://localhost:8000/images/${element.profileImage}`}
                   alt=""
                 />
+                {element.online && <span></span>}
                 <h2>{element.name}</h2>
               </div>
             );
           })}
       </aside>
       <div className={classes.chat}>
-        {message.length > 0 &&
-          message.map(element => <h1 key={Math.random()}>{element}</h1>)}
-        <input type="text " ref={messageInput} />
-
-        <button onClick={sentMessage}>Join a room</button>
+        <div className={classes.chatMessages}>
+          {message.length > 0 &&
+            message.map(element => (
+              <h1
+                key={Math.random()}
+                className={
+                  element.author == localStorage.getItem("id") ? classes.me : null
+                }
+              >
+                {element.text}
+              </h1>
+            ))}
+        </div>
+        <div className={classes.chatForm}>
+          <textarea className={classes.formInput} ref={messageInput}></textarea>
+          <button onClick={sentMessage}>Send</button>
+        </div>
       </div>
     </div>
   );
