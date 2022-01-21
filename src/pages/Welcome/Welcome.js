@@ -8,7 +8,7 @@ import comments from "./commentsData";
 
 const Welcome = () => {
   useEffect(() => {
-    document.title = "Erodate";
+    document.title = "Datingify";
 
     return () => {
       document.title = "";
@@ -19,7 +19,7 @@ const Welcome = () => {
     <Fragment>
       <div className={classes.container}>
         <article className={classes.infoContainer}>
-          <h1>ERODATE</h1>
+          <h1>Datingify</h1>
           <p>Start chating today and find your love one for life.</p>
           <div>
             <Link to="/login">Login</Link>

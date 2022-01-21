@@ -43,7 +43,7 @@ function Register() {
 
   return (
     <form>
-      <h2>ERO DATING</h2>
+      <h2>Datingify</h2>
       <label>Creat Account</label>
       {message && <p className={classes.succes}>{message}</p>}
       {error.length > 0 &&

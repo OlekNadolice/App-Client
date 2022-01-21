@@ -55,7 +55,7 @@ function Login() {
   return (
     <div className={style.container}>
       <form>
-        <h2>ERO DATING</h2>
+        <h2>Datingify</h2>
         <label>Login To Your Account</label>
         {errorMessage && <p className={style.error}>{errorMessage}</p>}
 
