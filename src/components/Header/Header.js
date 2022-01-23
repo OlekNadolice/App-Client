@@ -1,26 +1,23 @@
 import React, { useContext, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
-import { authContext } from "../../context/AuthContext";
+import { authContext } from "context/AuthContext";
 import styles from "./header.module.css";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
 import { FaUserFriends } from "react-icons/fa";
 import { RiMessengerLine } from "react-icons/ri";
-import Modal from "../Modal/Modal";
-import FriendsRequest from "../FriendsRequest/FriendsRequest";
+import Modal from "components/Modal/Modal";
+import FriendsRequest from "components/FriendsRequest/FriendsRequest";
 
 function Header() {
-  const { setIsLoggedIn, setToken, userImage } = useContext(authContext);
+  const { setIsLoggedIn, setToken, userImage, socket } = useContext(authContext);
   const userName = localStorage.getItem("name");
   const [active, setActive] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  // const userImage = localStorage.getItem("profileImage");
-  const logoutHandler = e => {
-    e.preventDefault();
-    localStorage.removeItem("token");
-    localStorage.removeItem("name");
-    localStorage.removeItem("profileImage");
-    localStorage.removeItem("id");
+
+  const logoutHandler = () => {
+    socket.disconnect();
+    localStorage.clear();
     setToken("");
     setIsLoggedIn(false);
   };
@@ -62,7 +59,9 @@ function Header() {
             Settings
           </NavLink>
 
-          <button onClick={logoutHandler}>Logout</button>
+          <button className={styles.btn} onClick={logoutHandler}>
+            Logout
+          </button>
         </nav>
       </div>
       <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Friends Requests">
