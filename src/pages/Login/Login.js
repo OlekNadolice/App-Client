@@ -2,21 +2,19 @@ import React, { useEffect, useContext, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaExpeditedssl } from "react-icons/fa";
 import { MdOutlineMail } from "react-icons/md";
-import { authContext } from "../../context/AuthContext";
-import useFetch from "../../hooks/useFetch";
+import { authContext } from "context/AuthContext";
+import useFetch from "hooks/useFetch";
 import style from "./login.module.css";
 
 function Login() {
   const { setIsLoggedIn, setToken, setUserImage } = useContext(authContext);
   const [errorMessage, setErrorMessage] = useState("");
-
   const emailInputRef = useRef("");
   const passwordInputRef = useRef("");
-
   const request = useFetch();
+
   useEffect(() => {
     document.title = "Login";
-
     return () => {
       document.title = "";
     };
@@ -35,8 +33,8 @@ function Login() {
       }
 
       if (response.status === 201) {
-        localStorage.setItem("token", response.token);
         const { name, profileImage, id } = response.data;
+        localStorage.setItem("token", response.token);
         localStorage.setItem("name", name);
         localStorage.setItem(
           "profileImage",
