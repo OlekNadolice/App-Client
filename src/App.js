@@ -1,23 +1,28 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useContext } from "react";
-import "./global.css";
-import Home from "./pages/Home/Home";
-import Welcome from "./pages/Welcome/Welcome";
-import Login from "./pages/Login/Login";
-import Register from "./pages/Register/Register";
-import Settings from "./pages/Settings/Settings";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
-import User from "./pages/User/User";
-import Friends from "./pages/Friends/Friends";
-import Posts from "./pages/Posts/Posts";
-import Info from "./pages/Info/Info";
-import NotFounds from "./pages/NotFound/NotFounds";
-import { authContext } from "./context/AuthContext";
-import Chat from "./pages/Chat/Chat";
+import { useContext, useEffect } from "react";
+
+import "global.css";
+import Home from "pages/Home/Home";
+import Welcome from "pages/Welcome/Welcome";
+import Login from "pages/Login/Login";
+import Register from "pages/Register/Register";
+import Settings from "pages/Settings/Settings";
+import Header from "components/Header/Header";
+import Footer from "components/Footer/Footer";
+import User from "pages/User/User";
+import Friends from "pages/Friends/Friends";
+import Posts from "pages/Posts/Posts";
+import Info from "pages/Info/Info";
+import NotFounds from "pages/NotFound/NotFounds";
+import { authContext } from "context/AuthContext";
+import Chat from "pages/Chat/Chat";
 import React from "react";
 function App() {
-  const { isLoggedIn } = useContext(authContext);
+  const { isLoggedIn, socket } = useContext(authContext);
+
+  useEffect(() => {
+    socket && isLoggedIn && socket.connect();
+  }, [socket]);
 
   return (
     <div className="App">
