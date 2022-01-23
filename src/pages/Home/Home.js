@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useContext } from "react";
-import UserCard from "../../components/UserCard/UserCard";
-import useQuery from "../../hooks/useQuery";
+import UserCard from "components/UserCard/UserCard";
+import useQuery from "hooks/useQuery";
 import classes from "./home.module.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import ReactPaginate from "react-paginate";
-import { authContext } from "../../context/AuthContext";
+import { authContext } from "context/AuthContext";
 function Home() {
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
   const limit = 8;
 
-  const { setToken, setIsLoggedIn, token } = useContext(authContext);
+  const { setIsLoggedIn, socket } = useContext(authContext);
 
   const {
     data: users,
@@ -25,10 +25,10 @@ function Home() {
   useEffect(() => {
     document.title = "Home";
     users && setCount(users.count);
-
-    error && error.message === "403" && setToken("");
-    error && error.message === "403" && setIsLoggedIn(false);
-
+    if (error && error.message === "403") {
+      setIsLoggedIn(false);
+      socket.disconnect();
+    }
     return () => {
       document.title = "";
     };
