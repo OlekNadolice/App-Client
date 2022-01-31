@@ -5,33 +5,33 @@ import classes from "./home.module.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import ReactPaginate from "react-paginate";
 import { authContext } from "context/AuthContext";
+import useDocumentTitle from "hooks/useDocumentTitle";
 function Home() {
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
   const limit = 8;
-
   const { setIsLoggedIn, socket } = useContext(authContext);
+
+  useDocumentTitle("Home");
 
   const {
     data: users,
     error,
     loading,
-  } = useQuery(`http://127.0.0.1:8000/auth/users?page=${page}`, {
+  } = useQuery(`auth/users?page=${page}`, {
     headers: {
       authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
 
+  const renderUsers = users && !loading && users.data.length >= 1;
+
   useEffect(() => {
-    document.title = "Home";
     users && setCount(users.count);
     if (error && error.message === "403") {
       setIsLoggedIn(false);
       socket.disconnect();
     }
-    return () => {
-      document.title = "";
-    };
   }, [users, error]);
 
   return (
@@ -43,9 +43,7 @@ function Home() {
           </div>
         )}
 
-        {users &&
-          !loading &&
-          users.data.length >= 1 &&
+        {renderUsers &&
           users.data.map(element => {
             return (
               <UserCard
@@ -53,7 +51,11 @@ function Home() {
                 id={element._id}
                 name={element.name}
                 city={element.city}
-                profileImage={`http://localhost:8000/images/${element.profileImage}`}
+                profileImage={
+                  element.profileImage.includes(".jpg")
+                    ? `http://localhost:8000/images/${element.profileImage}`
+                    : element.profileImage
+                }
                 age={element.age}
               />
             );
