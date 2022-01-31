@@ -6,7 +6,7 @@
 
 form {
   height: 100vh;
-  gap: 13px;
+  gap: 10px;
   flex-basis: 100%;
   display: flex;
   flex-direction: column;
@@ -16,48 +16,47 @@ form {
 
 form h2 {
   color: rgb(158, 28, 28);
-
-  font-size: clamp(45px, 10vw, 61px);
+  margin-bottom: 10px;
+  font-size: clamp(55px, calc(7.5vw - 40px), 85px);
   letter-spacing: -3px;
   font-weight: 800;
   transform: translateY(15px);
 }
 
-form div {
-  border: 1px solid rgb(94, 90, 90);
-  border-radius: 10px;
-  padding: 5px 12px;
-  display: flex;
-}
-
 form label {
   font-weight: 600;
   font-size: 18px;
-
   color: #444;
-  text-transform: uppercase;
+  /* margin-top: 2.5px; */
 }
 
 form input {
-  border: none;
+  width: 220px;
+  height: 35px;
+  margin-top: 5px;
+  cursor: pointer;
 }
 
 form input:focus {
   outline: none;
 }
 
-form button {
-  border-radius: 10px;
+form input:focus {
+  border: 2px solid #6da49c;
+}
+
+form button,
+.facebookBtn {
   color: #fff;
   font-weight: 600;
-  background-color: hsl(0, 38%, 36%);
-  padding: 10px 25px;
+  background-color: #9e1c1c;
+  margin-top: 5px;
   cursor: pointer;
   border: none;
   font-size: 16px;
-  text-transform: uppercase;
-  /* max-width: 260px; */
-  width: 240px;
+
+  width: 220px;
+  height: 35px;
 }
 
 .paragraph {
@@ -86,14 +85,39 @@ form a {
 form input:autofill {
   background: #fff;
 }
+.facebookBtn {
+  background-color: #0a95ff;
+  text-decoration: none;
+  display: block;
+  color: #fff;
+  /* text-align: center; */
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+}
+
+.facebookBtn > a {
+  color: white;
+  display: block;
+  margin: auto 0;
+}
 
 .icon {
   font-size: 20px;
   color: rgb(158, 28, 28);
 }
 
+.iconGoogle {
+  background-color: #fff;
+  height: 90%;
+  font-size: 20px;
+  width: 15%;
+  margin-left: 2px;
+}
+
 .error {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: #d8000c;
 }
@@ -101,5 +125,5 @@ form input:autofill {
 .succes {
   font-size: 16px;
   font-weight: 600;
-  color: #4bb543;
+  color: #6ad163;
 }
