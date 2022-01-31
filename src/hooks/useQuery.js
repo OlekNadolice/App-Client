@@ -9,7 +9,7 @@ const useQuery = (url, obj = null) => {
     setLoading(true);
     let componentMounted = true;
 
-    fetch(url, obj)
+    fetch(`http://localhost:8000/${url}`, obj)
       .then(response => {
         if (response.status === 403) {
           throw new Error(response.status);

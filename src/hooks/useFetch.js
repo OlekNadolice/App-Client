@@ -4,7 +4,7 @@ const useFetch = () => {
   const [error, setError] = useState("");
   return async (url, obj, auth) => {
     try {
-      const response = await fetch(url, {
+      const response = await fetch(`http://127.0.0.1:8000/${url}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
