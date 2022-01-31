@@ -11,11 +11,12 @@ import Header from "components/Header/Header";
 import Footer from "components/Footer/Footer";
 import User from "pages/User/User";
 import Friends from "pages/Friends/Friends";
-import Posts from "pages/Posts/Posts";
+
 import Info from "pages/Info/Info";
 import NotFounds from "pages/NotFound/NotFounds";
 import { authContext } from "context/AuthContext";
 import Chat from "pages/Chat/Chat";
+import OAuthVerificationPage from "pages/oAuthVerification/OAuthVerificationPage";
 import React from "react";
 function App() {
   const { isLoggedIn, socket } = useContext(authContext);
@@ -29,6 +30,10 @@ function App() {
       <BrowserRouter>
         {isLoggedIn && <Header />}
         <Routes>
+          <Route
+            path="/veryfied/:token/:id/:name/:profileImage"
+            element={!isLoggedIn ? <OAuthVerificationPage /> : <Navigate to="/home" />}
+          />
           <Route path="/" element={isLoggedIn ? <Navigate to="/home" /> : <Welcome />} />
           <Route path="/home" element={isLoggedIn ? <Home /> : <Navigate to="login" />} />
           <Route
@@ -48,7 +53,7 @@ function App() {
             element={isLoggedIn ? <User /> : <Navigate to="/login" />}
           >
             <Route path="/users/:id/friends" element={<Friends />} />
-            <Route path="/users/:id/posts" element={<Posts />} />
+
             <Route path="/users/:id/info" element={<Info />} />
           </Route>
           <Route path="/chat" element={isLoggedIn ? <Chat /> : <Navigate to="login" />} />
