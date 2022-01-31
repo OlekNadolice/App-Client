@@ -1,36 +1,27 @@
 import React, { useEffect, useContext, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { FaExpeditedssl } from "react-icons/fa";
-import { MdOutlineMail } from "react-icons/md";
 import { authContext } from "context/AuthContext";
 import useFetch from "hooks/useFetch";
 import style from "./login.module.css";
-
+import useDocumentTitle from "hooks/useDocumentTitle";
+import { FcGoogle } from "react-icons/fc";
 function Login() {
   const { setIsLoggedIn, setToken, setUserImage } = useContext(authContext);
   const [errorMessage, setErrorMessage] = useState("");
   const emailInputRef = useRef("");
   const passwordInputRef = useRef("");
   const request = useFetch();
-
-  useEffect(() => {
-    document.title = "Login";
-    return () => {
-      document.title = "";
-    };
-  }, []);
+  useDocumentTitle("Login");
 
   const loginHandler = async e => {
     e.preventDefault();
     try {
-      const response = await request("http://127.0.0.1:8000/auth/login", {
+      const response = await request("auth/login", {
         email: emailInputRef.current.value,
         password: passwordInputRef.current.value,
       });
 
-      if (response.status === 401) {
-        setErrorMessage(response.message);
-      }
+      if (response.status === 401) setErrorMessage(response.message);
 
       if (response.status === 201) {
         const { name, profileImage, id } = response.data;
@@ -54,28 +45,22 @@ function Login() {
     <div className={style.container}>
       <form>
         <h2>Datingify</h2>
-        <label>Login To Your Account</label>
-        {errorMessage && <p className={style.error}>{errorMessage}</p>}
+
+        {errorMessage && <p className={style.error}>Invalid Credentials !</p>}
 
         <div>
-          <input
-            autoComplete="new-password"
-            type="text"
-            placeholder="Enter your email"
-            ref={emailInputRef}
-          />
-          <MdOutlineMail className={style.icon} />
+          <label>Email</label>
+          <input autoComplete="new-password" type="text" ref={emailInputRef} />
         </div>
         <div>
-          <input
-            type="password"
-            placeholder="Enter your password"
-            ref={passwordInputRef}
-            autoComplete="new-password"
-          />
-          <FaExpeditedssl className={style.icon} />
+          <label>Password</label>
+          <input type="password" ref={passwordInputRef} autoComplete="new-password" />
         </div>
         <button onClick={loginHandler}>Login</button>
+        <button className={style.facebookBtn}>
+          <FcGoogle className={style.iconGoogle} />
+          <a href="http://localhost:8000/auth/google">Sign in with Google</a>
+        </button>
 
         <span>
           <p className={style.paragraph}>Dont have an account ?</p>
