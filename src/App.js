@@ -1,23 +1,22 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useContext, useEffect } from "react";
-
-import "global.css";
-import Home from "pages/Home/Home";
-import Welcome from "pages/Welcome/Welcome";
-import Login from "pages/Login/Login";
-import Register from "pages/Register/Register";
-import Settings from "pages/Settings/Settings";
-import Header from "components/Header/Header";
-import Footer from "components/Footer/Footer";
-import User from "pages/User/User";
-import Friends from "pages/Friends/Friends";
-
-import Info from "pages/Info/Info";
-import NotFounds from "pages/NotFound/NotFounds";
+import { Header, Footer } from "components/index";
 import { authContext } from "context/AuthContext";
-import Chat from "pages/Chat/Chat";
-import OAuthVerificationPage from "pages/oAuthVerification/OAuthVerificationPage";
-import React from "react";
+import { useContext, useEffect } from "react";
+import "global.css";
+import {
+  Welcome,
+  Login,
+  Register,
+  Settings,
+  User,
+  Chat,
+  Home,
+  Info,
+  Friends,
+  NotFounds,
+  OAuthVerificationPage,
+} from "pages/imports";
+
 function App() {
   const { isLoggedIn, socket } = useContext(authContext);
 
