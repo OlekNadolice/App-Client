@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Header, Footer } from "components/index";
 import { authContext } from "context/AuthContext";
 import { useContext, useEffect } from "react";
+
 import "global.css";
 import {
   Welcome,
@@ -17,6 +18,9 @@ import {
   OAuthVerificationPage,
 } from "pages/imports";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   const { isLoggedIn, socket } = useContext(authContext);
 
@@ -24,8 +28,32 @@ function App() {
     socket && isLoggedIn && socket.connect();
   }, [socket]);
 
+  useEffect(() => {
+    if (socket) {
+      socket.on("friendsRequest", data => {
+        toast(` ${data} has send you a friend request!`, {
+          className: "a",
+        });
+      });
+
+      return () => socket.removeAllListeners();
+    }
+  });
+
+  const showToast = () => {
+    toast("Someone has send you a message!", {
+      className: "a",
+    });
+  };
+
   return (
     <div className="App">
+      <ToastContainer
+        hideProgressBar={true}
+        autoClose={2000}
+        position="top-right"
+        theme="#803939"
+      />
       <BrowserRouter>
         {isLoggedIn && <Header />}
         <Routes>
