@@ -6,10 +6,9 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
 import { FaUserFriends } from "react-icons/fa";
 import { RiMessengerLine } from "react-icons/ri";
-import Modal from "components/Modal/Modal";
-import FriendsRequest from "components/FriendsRequest/FriendsRequest";
+import { Modal, FriendsRequest } from "components/index";
 
-function Header() {
+export function Header() {
   const { setIsLoggedIn, setToken, userImage, socket } = useContext(authContext);
   const userName = localStorage.getItem("name");
   const [active, setActive] = useState(false);
@@ -46,6 +45,7 @@ function Header() {
         </section>
         <nav className={active ? styles.isActive : styles.notActive}>
           <NavLink
+            onClick={() => active && setActive(false)}
             to="/home"
             className={props => (props.isActive ? styles.active : null)}
           >
@@ -55,6 +55,7 @@ function Header() {
           <NavLink
             to="/settings"
             className={props => (props.isActive ? styles.active : null)}
+            onClick={() => active && setActive(false)}
           >
             Settings
           </NavLink>
@@ -70,5 +71,3 @@ function Header() {
     </header>
   );
 }
-
-export default Header;

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 
-const useOnScreen = options => {
+export const useOnScreen = options => {
   const [target, setTarget] = useState("");
   const [isVisible, setIsVisible] = useState(false);
 
   const callback = entries => {
     const [entry] = entries;
-    if (entry.intersectionRatio > 0) {
+    if (entry.isIntersecting) {
       console.log(entry);
       setIsVisible(entry.isIntersecting);
       observer.unobserve(target);
@@ -19,9 +19,9 @@ const useOnScreen = options => {
     target && observer.observe(target);
 
     return () => target && observer.unobserve(target);
-  }, [target]);
+  }, [target, options.threshold]);
 
   return { isVisible, setTarget };
 };
 
-export default useOnScreen;
+// export default useOnScreen;

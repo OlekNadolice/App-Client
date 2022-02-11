@@ -4,7 +4,7 @@ import { authContext } from "context/AuthContext";
 import ClipLoader from "react-spinners/CircleLoader";
 import classes from "./oAuthVerification.module.css";
 
-const OAuthVerificationPage = () => {
+export const OAuthVerificationPage = () => {
   const { setIsLoggedIn, setUserImage } = useContext(authContext);
   let { token, id, name, profileImage } = useParams();
 
@@ -24,5 +24,3 @@ const OAuthVerificationPage = () => {
     </div>
   );
 };
-
-export default OAuthVerificationPage;

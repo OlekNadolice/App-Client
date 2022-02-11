@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import styles from "./usercard.module.css";
 
-const UserCard = ({ name, age, city, profileImage, id }) => {
+export const UserCard = ({ name, age, city, profileImage, id }) => {
   return (
     <article className={styles.card}>
       <img src={profileImage} className={styles.userImage} alt="" />
@@ -20,5 +20,3 @@ const UserCard = ({ name, age, city, profileImage, id }) => {
     </article>
   );
 };
-
-export default UserCard;

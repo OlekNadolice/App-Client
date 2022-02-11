@@ -3,7 +3,7 @@ import { HiOutlinePlusSm } from "react-icons/hi";
 
 import { RiCloseFill } from "react-icons/ri";
 import classes from "./question.module.css";
-const Question = ({ title, description }) => {
+export const Question = ({ title, description }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const openHandler = () => {
@@ -24,5 +24,3 @@ const Question = ({ title, description }) => {
     </div>
   );
 };
-
-export default Question;

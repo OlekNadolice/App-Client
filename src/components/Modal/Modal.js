@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import classes from "./modal.module.css";
 import { AiOutlineClose } from "react-icons/ai";
 
-const Modal = ({ isOpen, setIsOpen, children, title }) => {
+export const Modal = ({ isOpen, setIsOpen, children, title }) => {
   if (isOpen)
     return ReactDOM.createPortal(
       <div className={classes.overlay}>
@@ -25,5 +25,3 @@ const Modal = ({ isOpen, setIsOpen, children, title }) => {
 
   if (!isOpen) return null;
 };
-
-export default Modal;
