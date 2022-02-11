@@ -5,14 +5,63 @@
   display: inline;
 }
 
-.succes {
+/* .succes {
   color: #4bb543;
   font-size: 20px;
   font-weight: 600;
+} */
+
+form > div {
+  display: flex;
+  flex-direction: column;
+
+  width: 220px;
+}
+
+form div label {
+  font-size: 16px;
 }
 
 .error {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: #d8000c;
+  margin-top: 5px;
+}
+
+.container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.thankYou {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 clamp(30px, 2.5vw, 50px);
+  gap: 10px;
+  /* min-inline-size: 170px; */
+
+  height: 300px;
+}
+
+.thankYou > h2 {
+  font-size: clamp(20px, 2.5vw, 25px);
+  color: #444;
+  text-align: center;
+}
+
+.thankYou > a {
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.successIcon {
+  color: green;
+  font-size: clamp(45px, 50vw, 65px);
+  align-self: center;
 }

@@ -8,4 +8,10 @@
 
 body {
   font-family: "Open Sans", sans-serif;
+  overflow-x: hidden;
+}
+
+.a {
+  background-color: #cf6161;
+  color: #fff;
 }

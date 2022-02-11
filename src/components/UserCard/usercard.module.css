@@ -15,6 +15,7 @@
   color: hsl(0, 88%, 36%);
   font-size: 20px;
   font-weight: 600;
+  text-transform: capitalize;
 }
 
 .cardInfo {

@@ -1,8 +1,8 @@
 .profileImage {
-  width: clamp(50px, 7.5vw, 65px);
-  height: clamp(50px, 7.5vw, 65px);
+  width: clamp(45px, 7.5vw, 65px);
+  height: clamp(45px, 7.5vw, 65px);
   border-radius: 50%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .header {
@@ -13,7 +13,7 @@
   gap: 20px;
   height: 80px;
   background-color: rgb(128, 57, 57);
-  padding: 5px clamp(10px, 10vw, 30px);
+  padding: 5px clamp(7px, 6vw, 30px);
   position: sticky;
   z-index: 2;
   top: 0;
@@ -27,7 +27,6 @@
 }
 
 .headerRight {
-  /* background-color: red; */
   display: flex;
   align-items: center;
 }
@@ -54,11 +53,13 @@ nav a {
   font-weight: 500;
 }
 
-nav button {
-  background-color: #fff;
-  font-weight: 600;
+.btn {
+  background-color: transparent;
+  color: #fff;
+  font-weight: 500;
+  font-size: clamp(14px, 2vw, 16px);
 
-  padding: clamp(5px, 10vw, 10px) clamp(8px, 10vw, 12px);
+  padding-bottom: 2.5px;
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -83,7 +84,7 @@ nav button {
 
 .iconMenu {
   color: #fff;
-  font-size: 25px;
+  font-size: clamp(15px, 6vw, 25px);
   cursor: pointer;
   display: none;
   order: 1;
@@ -93,7 +94,7 @@ nav button {
 .iconMessenger {
   color: #fff;
   cursor: pointer;
-  font-size: 25px;
+  font-size: clamp(15px, 6vw, 25px);
 }
 
 @media (max-width: 568px) {
