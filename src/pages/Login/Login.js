@@ -1,11 +1,11 @@
-import React, { useEffect, useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { authContext } from "context/AuthContext";
-import useFetch from "hooks/useFetch";
+import { useFetch, useDocumentTitle } from "hooks/imports";
 import style from "./login.module.css";
-import useDocumentTitle from "hooks/useDocumentTitle";
+
 import { FcGoogle } from "react-icons/fc";
-function Login() {
+export function Login() {
   const { setIsLoggedIn, setToken, setUserImage } = useContext(authContext);
   const [errorMessage, setErrorMessage] = useState("");
   const emailInputRef = useRef("");
@@ -29,7 +29,7 @@ function Login() {
         localStorage.setItem("name", name);
         localStorage.setItem(
           "profileImage",
-          `http://localhost:8000/images/${profileImage}`
+          `${process.env.REACT_APP_BACKEND_URL}images/${profileImage}`
         );
         localStorage.setItem("id", id);
         setToken(response.token);
@@ -59,7 +59,9 @@ function Login() {
         <button onClick={loginHandler}>Login</button>
         <button className={style.facebookBtn}>
           <FcGoogle className={style.iconGoogle} />
-          <a href="http://localhost:8000/auth/google">Sign in with Google</a>
+          <a href={`${process.env.REACT_APP_BACKEND_URL}auth/google`}>
+            Sign in with Google
+          </a>
         </button>
 
         <span>
@@ -70,5 +72,3 @@ function Login() {
     </div>
   );
 }
-
-export default Login;

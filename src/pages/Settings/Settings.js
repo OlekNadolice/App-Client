@@ -1,28 +1,22 @@
-import React, { useEffect, useRef, useContext, useState } from "react";
-import useFetch from "hooks/useFetch";
-import { authContext } from "context/AuthContext";
-import { GoPerson } from "react-icons/go";
-import { AiOutlineSecurityScan } from "react-icons/ai";
-import { MdOutlinePhotoCamera } from "react-icons/md";
-import classes from "./settings.module.css";
+import React, { useContext, useReducer, useState } from "react";
+import { useFetch, useDocumentTitle } from "hooks/imports";
 
-function Settings() {
-  const { token, setUserImage, setIsLoggedIn } = useContext(authContext);
-  const [currentFormContent, setCurrentFormContent] = useState(1);
-  const [message, setMessage] = useState("");
-  const nameInputRef = useRef("");
-  const cityInputRef = useRef("");
-  const bioInputRef = useRef("");
+import { authContext } from "context/AuthContext";
+import { Link } from "react-router-dom";
+import { MdOutlinePhotoCamera, MdDone, MdPerson } from "react-icons/md";
+import classes from "./settings.module.css";
+import reducer, { formState } from "./settingsReducer";
+import { Modal } from "components";
+
+export function Settings() {
+  const { setUserImage, setIsLoggedIn } = useContext(authContext);
+  const [state, dispatch] = useReducer(reducer, formState);
+  const { name, city, bio, submited, currentFormContent } = state;
+  const [isOpen, setIsOpen] = useState(false);
   const fetchData = useFetch();
   const fetchAuthorization = `Bearer ${localStorage.getItem("token")}`;
-
-  useEffect(() => {
-    document.title = "Settings";
-
-    return () => {
-      document.title = "";
-    };
-  }, []);
+  const server = process.env.REACT_APP_BACKEND_URL;
+  useDocumentTitle("Settings");
 
   const saveSettingsHandler = e => {
     e.preventDefault();
@@ -31,17 +25,14 @@ function Settings() {
     const files = e.target.files;
     formData.append("profileImage", files[0]);
 
-    fetch("http://127.0.0.1:8000/auth/update", {
+    fetch(`${server}auth/update`, {
       method: "POST",
       headers: {
         authorization: fetchAuthorization,
       },
       body: formData,
     }).then(response => {
-      localStorage.setItem(
-        "profileImage",
-        `http://localhost:8000/images/${files[0].name}`
-      );
+      localStorage.setItem("profileImage", `${server}images/${files[0].name}`);
       setUserImage(localStorage.getItem("profileImage"));
     });
   };
@@ -50,53 +41,55 @@ function Settings() {
     e.preventDefault();
     try {
       const response = await fetchData(
-        "http://127.0.0.1:8000/auth/updateUserInfo",
+        "auth/updateUserInfo",
         {
-          name: nameInputRef.current.value,
-          bio: bioInputRef.current.value,
-          city: cityInputRef.current.value,
+          name,
+          bio,
+          city,
         },
         fetchAuthorization
       );
 
-      response.status === 204 && setMessage("Saved sucesfully");
-      nameInputRef.current.value = "";
-      cityInputRef.current.value = "";
-      bioInputRef.current.value = "";
+      if (response.status === 204) dispatch({ type: "SUBMIT" });
     } catch (err) {
       console.log(err);
     }
   };
 
   const deleteAccountHandler = async () => {
-    const response = await fetchData(
-      "http://127.0.0.1:8000/auth/deleteAccount",
-      {},
-      fetchAuthorization
-    );
+    const response = await fetchData("auth/deleteAccount", {}, fetchAuthorization);
     if (response.status === 204) {
       setIsLoggedIn(false);
       localStorage.clear();
     }
   };
 
+  if (submited) {
+    return (
+      <div className={classes.containerFlex}>
+        <MdDone className={classes.successIcon} />
+        <p className={classes.container_info}>Updated successfully</p>
+        <button>
+          <Link to="/home">Close</Link>
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className={classes.container}>
       <div className={classes.card}>
         <aside className={classes.sidebar}>
-          <div onClick={() => setCurrentFormContent(1)}>
-            <GoPerson />
+          <div onClick={() => dispatch({ type: "CHANGE_FORM_CONTENT", payload: 1 })}>
+            <MdPerson />
             <p>Personal Info</p>
           </div>
-          <div onClick={() => setCurrentFormContent(2)}>
-            <AiOutlineSecurityScan />
-            <p>Security</p>
-          </div>
-          <div onClick={() => setCurrentFormContent(3)}>
-            <GoPerson />
+
+          <div onClick={() => dispatch({ type: "CHANGE_FORM_CONTENT", payload: 3 })}>
+            <MdPerson />
             <p>Delete Acccount</p>
           </div>
-          <div onClick={() => setCurrentFormContent(4)}>
+          <div onClick={() => dispatch({ type: "CHANGE_FORM_CONTENT", payload: 4 })}>
             <MdOutlinePhotoCamera />
             <p>Upload Photo</p>
           </div>
@@ -104,20 +97,33 @@ function Settings() {
 
         {currentFormContent === 1 && (
           <div className={classes.contentSection}>
-            {message ? <p className={classes.succes}>{message}</p> : null}
+            <h3>Change your Personal Info</h3>
+
             <div className={classes.formControl}>
               <label htmlFor="">Name</label>
-              <input type="text" name="" id="" ref={nameInputRef} />
+              <input
+                type="text"
+                name=""
+                id=""
+                onChange={e => dispatch({ type: "SET_NAME", payload: e.target.value })}
+              />
             </div>
 
             <div className={classes.formControl}>
               <label htmlFor="">City</label>
-              <input type="text" name="" id="" ref={cityInputRef} />
+              <input
+                type="text"
+                name=""
+                id=""
+                onChange={e => dispatch({ type: "SET_CITY", payload: e.target.value })}
+              />
             </div>
 
             <div className={classes.formControl}>
               <label htmlFor="">Bio</label>
-              <textarea ref={bioInputRef}></textarea>
+              <textarea
+                onChange={e => dispatch({ type: "SET_BIO", payload: e.target.value })}
+              ></textarea>
               <button onClick={updateUserInfo}>Save</button>
             </div>
           </div>
@@ -131,25 +137,37 @@ function Settings() {
               All of your data will be lost. <br />
               Make sure you really wanna do this.
             </p>
-            <button onClick={deleteAccountHandler}>Delete</button>
+            <button onClick={() => setIsOpen(true)}>Delete</button>
+            <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Delete Account">
+              <div className={classes.deleteContainer}>
+                <p>Are you sure that you want to delete your acccount ?</p>
+
+                <div>
+                  <button onClick={() => setIsOpen(false)}>Cancel</button>
+                  <button onClick={deleteAccountHandler}>Delete</button>
+                </div>
+              </div>
+            </Modal>
+          </div>
+        )}
+        {currentFormContent === 4 && (
+          <div className={classes.uploadPhotoContainer}>
+            <p className={classes.info}>
+              Here you can upload your photo, remember that only format JPEG is allowed.
+            </p>
+            <label htmlFor="upload-file" className={classes.labelUpload}>
+              Upload Photo
+            </label>
+            <input
+              accept=".jpg"
+              type="file"
+              name="profilePicture"
+              id="upload-file"
+              onChange={saveSettingsHandler}
+            />
           </div>
         )}
       </div>
-      {/* <div>
-          <label htmlFor="upload-file" className={classes.labelUpload}>
-            Upload Photo
-          </label>
-          <input
-            accept=".jpg"
-            type="file"
-            name="profilePicture"
-            id="upload-file"
-            ref={imageInputRef}
-            onChange={saveSettingsHandler}
-          />
-        </div> */}
     </div>
   );
 }
-
-export default Settings;

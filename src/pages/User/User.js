@@ -1,32 +1,51 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { authContext } from "context/AuthContext";
 import { useParams, Link, Outlet } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import classes from "./user.module.css";
-import useQuery from "../../hooks/useQuery";
-import useFetch from "../../hooks/useFetch";
-function User() {
+import { useQuery, useFetch, useDocumentTitle } from "hooks/imports";
+
+export function User() {
+  const { socket } = useContext(authContext);
   const { id } = useParams();
-  const [action, setAction] = useState(false);
   const request = useFetch();
+  const [action, setAction] = useState(false);
+  const authorization = `Bearer ${localStorage.getItem("token")}`;
+  const { setDocumentTitle } = useDocumentTitle("Loading");
+  const clientId = localStorage.getItem("id");
 
   const {
     data: user,
     loading,
     error,
-  } = useQuery(`http://localhost:8000/auth/users?id=${id}`, {
+  } = useQuery(`users/${id}`, {
     headers: {
-      authorization: `Bearer ${localStorage.getItem("token")}`,
+      authorization,
     },
   });
 
+  const state = {
+    canSendFriendsRequest:
+      user &&
+      user.user._id !== clientId &&
+      !user.user.friends.includes(clientId) &&
+      !action &&
+      !user.user.friendsRequests.includes(clientId),
+
+    canDeleteFriend: user && user.user.friends.includes(clientId) && !action,
+  };
+
+  const { canSendFriendsRequest, canDeleteFriend } = state;
+
   const sendFriendRequestHandler = async () => {
+    socket.emit("friendsRequest", { id: localStorage.getItem("id"), targetID: id });
     try {
       const data = await request(
-        "http://localhost:8000/auth/sendRequest",
+        "users/sendRequest",
         {
           targetID: id,
         },
-        `Bearer ${localStorage.getItem("token")}`
+        authorization
       );
       setAction(true);
     } catch (err) {
@@ -36,12 +55,7 @@ function User() {
 
   const deleteFriendHandler = async () => {
     try {
-      const data = await request(
-        "http://localhost:8000/auth/deleteFriend",
-        { targetID: id },
-        `Bearer ${localStorage.getItem("token")}`
-      );
-
+      const data = await request("users/deleteFriend", { targetID: id }, authorization);
       setAction(true);
     } catch (err) {
       console.log(err);
@@ -49,38 +63,36 @@ function User() {
   };
 
   useEffect(() => {
-    if (user) {
-      document.title = user.data.name;
-    }
-
-    return () => {
-      document.title = "Erodate";
-    };
+    user && setDocumentTitle(user.user.name);
   }, [user]);
 
   if (user) {
-    const { profileImage, name, city } = user.data;
+    const { profileImage, name, city } = user.user;
     return (
       <div className={classes.container}>
         <article>
           <section className={classes.userHeader}>
             <div className={classes.sectionLeft}>
-              <img src={`http://localhost:8000/images/${profileImage}`} alt="" />
+              <img
+                src={
+                  profileImage.includes(".jpg")
+                    ? `${process.env.REACT_APP_BACKEND_URL}images/${profileImage}`
+                    : profileImage
+                }
+                alt=""
+              />
             </div>
             <div className={classes.sectionRight}>
               <h1>{name}</h1>
               <h4>{city}</h4>
-              {user.data._id !== localStorage.getItem("id") &&
-                !user.data.friends.includes(`${localStorage.getItem("id")}`) &&
-                !action && <button onClick={sendFriendRequestHandler}>Add Friend</button>}
+              {canSendFriendsRequest && (
+                <button onClick={sendFriendRequestHandler}>Add Friend</button>
+              )}
 
-              {user.data._id !== localStorage.getItem("id") &&
-                user.data.friends.includes(`${localStorage.getItem("id")}`) &&
-                !action && <button onClick={deleteFriendHandler}>Delete </button>}
+              {canDeleteFriend && <button onClick={deleteFriendHandler}>Delete </button>}
 
               <div className={classes.sectionRightNav}>
                 <Link to={`/users/${id}/friends`}>Friends</Link>
-                <Link to={`/users/${id}/posts`}>Posts</Link>
                 <Link to={`/users/${id}/info`}>Info</Link>
               </div>
             </div>
@@ -98,5 +110,3 @@ function User() {
     );
   }
 }
-
-export default User;

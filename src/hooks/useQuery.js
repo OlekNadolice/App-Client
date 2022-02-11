@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const useQuery = (url, obj = null) => {
+export const useQuery = (url, obj = null) => {
   const [data, setData] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -9,7 +9,7 @@ const useQuery = (url, obj = null) => {
     setLoading(true);
     let componentMounted = true;
 
-    fetch(`http://localhost:8000/${url}`, obj)
+    fetch(`${process.env.REACT_APP_BACKEND_URL}${url}`, obj)
       .then(response => {
         if (response.status === 403) {
           throw new Error(response.status);
@@ -28,5 +28,3 @@ const useQuery = (url, obj = null) => {
 
   return { data, loading, error };
 };
-
-export default useQuery;

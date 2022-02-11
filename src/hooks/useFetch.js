@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 
-const useFetch = () => {
+export const useFetch = () => {
   const [error, setError] = useState("");
+
   return async (url, obj, auth) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/${url}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}${url}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -21,5 +22,3 @@ const useFetch = () => {
     }
   };
 };
-
-export default useFetch;

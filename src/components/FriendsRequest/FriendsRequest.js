@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import classes from "./friendsRequest.module.css";
-import useQuery from "../../hooks/useQuery";
+import { useQuery } from "hooks/imports";
 import ClipLoader from "react-spinners/ClipLoader";
-const FriendsRequest = () => {
+export const FriendsRequest = () => {
   const id = localStorage.getItem("id");
+  const server = process.env.REACT_APP_BACKEND_URL;
   const [friendsRequests, setFriendsRequests] = useState([]);
-  const { data, error, loading } = useQuery(
-    `http://localhost:8000/auth/users?id=${id}&&type=friendsRequests`,
-    {
-      headers: {
-        authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }
-  );
+  const { data, error, loading } = useQuery(`users?id=${id}&&type=friendsRequests`, {
+    headers: {
+      authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
 
   useEffect(() => {
     data && setFriendsRequests(data.data.friendsRequests);
@@ -20,7 +18,7 @@ const FriendsRequest = () => {
 
   const acceptRequestHandler = async (index, targetID) => {
     try {
-      const response = await fetch("http://localhost:8000/auth/acceptRequest", {
+      const response = await fetch(`${server}users/acceptRequest`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +37,7 @@ const FriendsRequest = () => {
 
   const declineRequestHandler = async (index, targetID) => {
     try {
-      const response = await fetch("http://localhost:8000/auth/declineRequest", {
+      const response = await fetch(`${server}users/declineRequest`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,7 +62,11 @@ const FriendsRequest = () => {
             <div className={classes.requestFriendComponent} key={element._id}>
               <div className={classes.containerInfo}>
                 <img
-                  src={`http://localhost:8000/images/${element.profileImage}`}
+                  src={
+                    element.profileImage.includes(".jpg")
+                      ? `${server}images/${element.profileImage}`
+                      : element.profileImage
+                  }
                   alt="person"
                 />
                 <h3>{element.name}</h3>
@@ -98,5 +100,3 @@ const FriendsRequest = () => {
     </div>
   );
 };
-
-export default FriendsRequest;

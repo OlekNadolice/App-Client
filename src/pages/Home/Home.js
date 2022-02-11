@@ -1,24 +1,24 @@
 import React, { useEffect, useState, useContext } from "react";
-import UserCard from "components/UserCard/UserCard";
-import useQuery from "hooks/useQuery";
+import { UserCard } from "components/index";
+import { useQuery, useDocumentTitle } from "hooks/imports";
 import classes from "./home.module.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import ReactPaginate from "react-paginate";
 import { authContext } from "context/AuthContext";
-import useDocumentTitle from "hooks/useDocumentTitle";
-function Home() {
+
+export function Home() {
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
   const limit = 8;
   const { setIsLoggedIn, socket } = useContext(authContext);
-
+  const server = process.env.REACT_APP_BACKEND_URL;
   useDocumentTitle("Home");
 
   const {
     data: users,
     error,
     loading,
-  } = useQuery(`auth/users?page=${page}`, {
+  } = useQuery(`users?page=${page}`, {
     headers: {
       authorization: `Bearer ${localStorage.getItem("token")}`,
     },
@@ -45,18 +45,19 @@ function Home() {
 
         {renderUsers &&
           users.data.map(element => {
+            const { _id: id, name, city, profileImage, age } = element;
             return (
               <UserCard
-                key={element._id}
-                id={element._id}
-                name={element.name}
-                city={element.city}
+                key={id}
+                id={id}
+                name={name}
+                city={city}
                 profileImage={
-                  element.profileImage.includes(".jpg")
-                    ? `http://localhost:8000/images/${element.profileImage}`
-                    : element.profileImage
+                  profileImage.includes(".jpg")
+                    ? `${server}images/${profileImage}`
+                    : profileImage
                 }
-                age={element.age}
+                age={age}
               />
             );
           })}
@@ -80,5 +81,3 @@ function Home() {
     </div>
   );
 }
-
-export default Home;

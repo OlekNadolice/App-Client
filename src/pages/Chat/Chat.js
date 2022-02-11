@@ -1,40 +1,36 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, { useEffect, useRef, useContext, useReducer } from "react";
 import classes from "./chat.module.css";
-import useQuery from "hooks/useQuery";
+import { useQuery, useDocumentTitle } from "hooks/imports";
 import { authContext } from "context/AuthContext";
 import ClipLoader from "react-spinners/ClipLoader";
 import { AiOutlineSend } from "react-icons/ai";
+import chatReducer, { initialState } from "./chatReducer";
+import { toast } from "react-toastify";
 
-const Chat = () => {
-  const [users, setUsers] = useState([]);
+export const Chat = () => {
+  const [state, dispatch] = useReducer(chatReducer, initialState);
+  const { users, currentUser, currentUserName, message } = state;
   const messageInput = useRef("");
   const messagesEndRef = useRef(null);
-  const [currentUserName, setCurrentUserName] = useState("");
-  const [message, setMessage] = useState([]);
-  const [currentUser, setCurrentUser] = useState("");
   const { socket } = useContext(authContext);
+  useDocumentTitle("Chat");
 
-  const { data, loading, error } = useQuery("http://localhost:8000/messenger/", {
+  const { data, loading, error } = useQuery("messenger/", {
     headers: {
       authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
 
   useEffect(() => {
-    let componentMounted = true;
-    componentMounted && (document.title = "Chat");
-    return () => (componentMounted = false);
-  }, []);
-
-  useEffect(() => {
-    messagesEndRef?.current.scroll({ top: messagesEndRef.current.scrollHeight });
+    users.length > 0 &&
+      messagesEndRef?.current.scroll({ top: messagesEndRef.current.scrollHeight });
   }, [message]);
 
   useEffect(() => {
     let componentMounted = true;
 
     if (componentMounted && data) {
-      setUsers(data.data.friends);
+      dispatch({ type: "FETCH_USERS", payload: data.data.friends });
       socket.emit("active", { id: localStorage.getItem("id") });
     }
 
@@ -45,24 +41,30 @@ const Chat = () => {
     if (socket) {
       socket.on("message", message => {
         if (message.author === currentUser) {
-          setMessage(prevState => [
-            ...prevState,
-            {
+          dispatch({
+            type: "RECEIVE_MESSAGE",
+            payload: {
               text: message.message,
               author: message.author,
+              created: message.created,
             },
-          ]);
+          });
+        } else {
+          toast(` ${message.senderName} has send you a message`, {
+            className: "a",
+          });
         }
       });
 
       socket.on("findChat", data => {
         data
-          ? setMessage(
-              data.map(e => {
+          ? dispatch({
+              type: "FIND_CONVERSATIONS",
+              payload: data.map(e => {
                 return { text: e.text, author: e.author, created: e.created };
-              })
-            )
-          : setMessage([]);
+              }),
+            })
+          : dispatch({ type: "FIND_CONVERSATIONS", payload: [] });
       });
 
       socket.on("active", response => {
@@ -75,7 +77,8 @@ const Chat = () => {
               return (e = { ...e });
             }
           });
-          setUsers([...updatedUsers]);
+
+          dispatch({ type: "FETCH_USERS", payload: updatedUsers });
         }
       });
       return () => socket.removeAllListeners();
@@ -87,21 +90,22 @@ const Chat = () => {
       message: messageInput.current.value,
       id: localStorage.getItem("id"),
       target: currentUser,
+      created: new Date(Date.now()),
     });
-    setMessage(prevState => [
-      ...prevState,
-      {
+
+    dispatch({
+      type: "SEND_MESSAGE",
+      payload: {
         text: messageInput.current.value,
         author: localStorage.getItem("id"),
         created: new Date(Date.now()),
       },
-    ]);
+    });
     messageInput.current.value = "";
   };
 
   const findChatMessages = async (secondUserId, name) => {
-    setCurrentUser(secondUserId);
-    setCurrentUserName(name);
+    dispatch({ type: "FIND_CURRENT_USER", payload: [secondUserId, name] });
     await socket.emit("findChat", {
       id: localStorage.getItem("id"),
       secondUserId: secondUserId,
@@ -116,18 +120,30 @@ const Chat = () => {
     );
   }
 
-  return (
-    <div className={classes.chatContainer}>
-      <aside className={classes.sidebar}>
-        {users.length > 0 &&
-          users.map(element => {
+  if (users.length === 0) {
+    return (
+      <div className={classes.flexContainer}>
+        <p>Drogi uzytkowniku, aby korzystać z chatu musisz posiadać znajomych. </p>
+      </div>
+    );
+  }
+
+  if (users.length > 0) {
+    return (
+      <div className={classes.chatContainer}>
+        <aside className={classes.sidebar}>
+          {users.map(element => {
             return (
               <div
                 onClick={() => findChatMessages(element._id, element.name)}
                 key={element._id}
               >
                 <img
-                  src={`http://localhost:8000/images/${element.profileImage}`}
+                  src={
+                    element.profileImage.includes(".jpg")
+                      ? `${process.env.REACT_APP_BACKEND_URL}images/${element.profileImage}`
+                      : element.profileImage
+                  }
                   alt=""
                 />
                 {element.online && <span></span>}
@@ -135,45 +151,48 @@ const Chat = () => {
               </div>
             );
           })}
-        {users.length === 0 && <p>Currently no friends</p>}
-      </aside>
-      <div className={classes.chat}>
-        <div className={classes.chatMessages} ref={messagesEndRef}>
-          {message.length > 0 &&
-            message.map(element => (
-              <>
-                <h1
-                  key={Math.random()}
-                  className={
-                    element.author == localStorage.getItem("id") ? classes.me : null
-                  }
-                >
-                  {element.text}
-                </h1>
+        </aside>
 
-                <h2
-                  className={
-                    element.author == localStorage.getItem("id") ? classes.mine : null
-                  }
-                >
-                  {new Date(Date.parse(element.created)).toLocaleString()}
-                </h2>
-              </>
-            ))}
-        </div>
-        <div className={classes.chatForm}>
-          <textarea
-            placeholder="Say something ..."
-            className={classes.formInput}
-            ref={messageInput}
-          ></textarea>
-          <button onClick={currentUser ? sentMessage : null}>
-            <AiOutlineSend className={classes.sendIcon}></AiOutlineSend>
-          </button>
+        <div className={classes.chat}>
+          <div className={classes.chatMessages} ref={messagesEndRef}>
+            {message.length > 0 &&
+              message.map(element => (
+                <>
+                  <h1
+                    key={Math.random()}
+                    className={
+                      element.author == localStorage.getItem("id") ? classes.me : null
+                    }
+                  >
+                    {element.text}
+                  </h1>
+
+                  <h2
+                    className={
+                      element.author == localStorage.getItem("id") ? classes.mine : null
+                    }
+                  >
+                    {new Date(Date.parse(element.created)).toLocaleString()}
+                  </h2>
+                </>
+              ))}
+          </div>
+          <div className={classes.chatForm}>
+            <textarea
+              placeholder={
+                currentUserName
+                  ? ` You are talking with ${currentUserName}`
+                  : "Say something to your friend..."
+              }
+              className={classes.formInput}
+              ref={messageInput}
+            ></textarea>
+            <button onClick={currentUser ? sentMessage : null}>
+              <AiOutlineSend className={classes.sendIcon}></AiOutlineSend>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
-
-export default Chat;

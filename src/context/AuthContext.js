@@ -1,23 +1,26 @@
 import React, { useState, useEffect, createContext } from "react";
 import { io } from "socket.io-client";
+
 export const authContext = createContext();
 
 const AuthContextProvider = props => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("token"));
   const [userImage, setUserImage] = useState(localStorage.getItem("profileImage"));
-
+  const server = process.env.REACT_APP_BACKEND_URL;
   const [socket, setSocket] = useState();
 
   useEffect(() => {
-    setSocket(
-      io("http://127.0.0.1:8000", {
-        query: {
-          user: localStorage.getItem("id"),
-        },
-        autoConnect: false,
-      })
-    );
+    if (isLoggedIn) {
+      setSocket(
+        io(server, {
+          query: {
+            user: localStorage.getItem("id"),
+          },
+          autoConnect: false,
+        })
+      );
+    }
   }, [isLoggedIn]);
 
   return (
@@ -30,6 +33,7 @@ const AuthContextProvider = props => {
         userImage,
         setUserImage,
         socket,
+        setSocket,
       }}
     >
       {props.children}
