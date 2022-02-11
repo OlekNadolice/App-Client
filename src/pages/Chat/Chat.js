@@ -15,7 +15,7 @@ export const Chat = () => {
   const { socket } = useContext(authContext);
   useDocumentTitle("Chat");
 
-  const { data, loading, error } = useQuery("messenger/", {
+  const { data, loading, error } = useQuery("/messenger/", {
     headers: {
       authorization: `Bearer ${localStorage.getItem("token")}`,
     },
@@ -141,7 +141,7 @@ export const Chat = () => {
                 <img
                   src={
                     element.profileImage.includes(".jpg")
-                      ? `${process.env.REACT_APP_BACKEND_URL}images/${element.profileImage}`
+                      ? `${process.env.REACT_APP_BACKEND_URL}/images/${element.profileImage}`
                       : element.profileImage
                   }
                   alt=""

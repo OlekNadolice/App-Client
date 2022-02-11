@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 export const Info = () => {
   const { id } = useParams();
   const [info, setInfo] = useState("");
-  const { data, error, loading } = useQuery(`users?id=${id}&&type=description`, {
+  const { data, error, loading } = useQuery(`/users?id=${id}&&type=description`, {
     headers: {
       authorization: `Bearer ${localStorage.getItem("token")}`,
     },

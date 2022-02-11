@@ -18,7 +18,7 @@ export function User() {
     data: user,
     loading,
     error,
-  } = useQuery(`users/${id}`, {
+  } = useQuery(`/users/${id}`, {
     headers: {
       authorization,
     },
@@ -41,7 +41,7 @@ export function User() {
     socket.emit("friendsRequest", { id: localStorage.getItem("id"), targetID: id });
     try {
       const data = await request(
-        "users/sendRequest",
+        "/users/sendRequest",
         {
           targetID: id,
         },
@@ -55,7 +55,7 @@ export function User() {
 
   const deleteFriendHandler = async () => {
     try {
-      const data = await request("users/deleteFriend", { targetID: id }, authorization);
+      const data = await request("/users/deleteFriend", { targetID: id }, authorization);
       setAction(true);
     } catch (err) {
       console.log(err);
@@ -76,7 +76,7 @@ export function User() {
               <img
                 src={
                   profileImage.includes(".jpg")
-                    ? `${process.env.REACT_APP_BACKEND_URL}images/${profileImage}`
+                    ? `${process.env.REACT_APP_BACKEND_URL}/images/${profileImage}`
                     : profileImage
                 }
                 alt=""

@@ -9,7 +9,7 @@ export const Friends = () => {
   const [friends, setFriends] = useState([]);
   const server = process.env.REACT_APP_BACKEND_URL;
 
-  const { data, loading, error } = useQuery(`users?id=${id}&&type=friends`, {
+  const { data, loading, error } = useQuery(`/users?id=${id}&&type=friends`, {
     headers: {
       authorization: `Bearer ${localStorage.getItem("token")}`,
     },
@@ -37,7 +37,7 @@ export const Friends = () => {
               <img
                 src={
                   e.profileImage.includes(".jpg")
-                    ? `${server}images/${e.profileImage}`
+                    ? `${server}/images/${e.profileImage}`
                     : e.profileImage
                 }
                 alt=""
@@ -52,5 +52,3 @@ export const Friends = () => {
     </div>
   );
 };
-
-// export default Friends;

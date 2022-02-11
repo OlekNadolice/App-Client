@@ -18,7 +18,7 @@ export function Home() {
     data: users,
     error,
     loading,
-  } = useQuery(`users?page=${page}`, {
+  } = useQuery(`/users?page=${page}`, {
     headers: {
       authorization: `Bearer ${localStorage.getItem("token")}`,
     },
@@ -54,7 +54,7 @@ export function Home() {
                 city={city}
                 profileImage={
                   profileImage.includes(".jpg")
-                    ? `${server}images/${profileImage}`
+                    ? `${server}/images/${profileImage}`
                     : profileImage
                 }
                 age={age}

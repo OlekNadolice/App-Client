@@ -25,7 +25,7 @@ export function Settings() {
     const files = e.target.files;
     formData.append("profileImage", files[0]);
 
-    fetch(`${server}auth/update`, {
+    fetch(`${server}/auth/update`, {
       method: "POST",
       headers: {
         authorization: fetchAuthorization,
@@ -41,7 +41,7 @@ export function Settings() {
     e.preventDefault();
     try {
       const response = await fetchData(
-        "auth/updateUserInfo",
+        "/auth/updateUserInfo",
         {
           name,
           bio,
@@ -57,7 +57,7 @@ export function Settings() {
   };
 
   const deleteAccountHandler = async () => {
-    const response = await fetchData("auth/deleteAccount", {}, fetchAuthorization);
+    const response = await fetchData("/auth/deleteAccount", {}, fetchAuthorization);
     if (response.status === 204) {
       setIsLoggedIn(false);
       localStorage.clear();

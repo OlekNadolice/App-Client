@@ -6,7 +6,7 @@ export const FriendsRequest = () => {
   const id = localStorage.getItem("id");
   const server = process.env.REACT_APP_BACKEND_URL;
   const [friendsRequests, setFriendsRequests] = useState([]);
-  const { data, error, loading } = useQuery(`users?id=${id}&&type=friendsRequests`, {
+  const { data, error, loading } = useQuery(`/users?id=${id}&&type=friendsRequests`, {
     headers: {
       authorization: `Bearer ${localStorage.getItem("token")}`,
     },
@@ -18,7 +18,7 @@ export const FriendsRequest = () => {
 
   const acceptRequestHandler = async (index, targetID) => {
     try {
-      const response = await fetch(`${server}users/acceptRequest`, {
+      const response = await fetch(`${server}/users/acceptRequest`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,7 +37,7 @@ export const FriendsRequest = () => {
 
   const declineRequestHandler = async (index, targetID) => {
     try {
-      const response = await fetch(`${server}users/declineRequest`, {
+      const response = await fetch(`${server}/users/declineRequest`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,7 +64,7 @@ export const FriendsRequest = () => {
                 <img
                   src={
                     element.profileImage.includes(".jpg")
-                      ? `${server}images/${element.profileImage}`
+                      ? `${server}/images/${element.profileImage}`
                       : element.profileImage
                   }
                   alt="person"

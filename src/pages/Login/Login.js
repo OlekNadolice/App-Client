@@ -29,7 +29,7 @@ export function Login() {
         localStorage.setItem("name", name);
         localStorage.setItem(
           "profileImage",
-          `${process.env.REACT_APP_BACKEND_URL}images/${profileImage}`
+          `${process.env.REACT_APP_BACKEND_URL}/images/${profileImage}`
         );
         localStorage.setItem("id", id);
         setToken(response.token);
@@ -59,7 +59,7 @@ export function Login() {
         <button onClick={loginHandler}>Login</button>
         <button className={style.facebookBtn}>
           <FcGoogle className={style.iconGoogle} />
-          <a href={`${process.env.REACT_APP_BACKEND_URL}auth/google`}>
+          <a href={`${process.env.REACT_APP_BACKEND_URL}/auth/google`}>
             Sign in with Google
           </a>
         </button>

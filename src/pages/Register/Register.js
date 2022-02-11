@@ -16,7 +16,7 @@ export function Register() {
   const registerHandler = async e => {
     try {
       e.preventDefault();
-      const data = await request("auth/register", {
+      const data = await request("/auth/register", {
         name: nameInputRef.current.value,
         email: emailInputRef.current.value,
         password: passwordInputRef.current.value,
