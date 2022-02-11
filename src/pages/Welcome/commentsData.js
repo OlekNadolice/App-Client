@@ -25,7 +25,7 @@ const comments = [
   {
     name: "Michał",
     description:
-      "Jezeli ktoś nie jest jeszcze przekonany do EroDate to polecam sprawdzić a na pewno nie będzie chciał wrócić do innych aplikacji.!",
+      "Jezeli ktoś nie jest jeszcze przekonany do Datingify to polecam sprawdzić a na pewno nie będzie chciał wrócić do innych aplikacji.!",
     img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmYWF_EDg6HKzdqzotYPmJHIf4KQcyHJCS8g&usqp=CAU",
   },
   {
@@ -37,3 +37,4 @@ const comments = [
 ];
 
 export default comments;
+export { data } from "./data";

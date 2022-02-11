@@ -1,12 +1,11 @@
 import React from "react";
 import classes from "./notfounds.module.css";
 
-function NotFounds() {
+export function NotFounds() {
   return (
     <div className={classes.container}>
-      <h1 className={classes.title}>Page Not Found 404 </h1>
+      <p>404</p>
+      <p className={classes.title}>Page Not Found </p>
     </div>
   );
 }
-
-export default NotFounds;
