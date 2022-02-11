@@ -16,7 +16,7 @@ export function Login() {
   const loginHandler = async e => {
     e.preventDefault();
     try {
-      const response = await request("auth/login", {
+      const response = await request("/auth/login", {
         email: emailInputRef.current.value,
         password: passwordInputRef.current.value,
       });
