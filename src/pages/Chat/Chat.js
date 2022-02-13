@@ -85,23 +85,25 @@ export const Chat = () => {
     }
   });
 
-  const sentMessage = async () => {
-    await socket.emit("message", {
-      message: messageInput.current.value,
-      id: localStorage.getItem("id"),
-      target: currentUser,
-      created: new Date(Date.now()),
-    });
-
-    dispatch({
-      type: "SEND_MESSAGE",
-      payload: {
-        text: messageInput.current.value,
-        author: localStorage.getItem("id"),
+  const sentMessage = async e => {
+    if (e.key === "Enter" || e.type === "click") {
+      await socket.emit("message", {
+        message: messageInput.current.value,
+        id: localStorage.getItem("id"),
+        target: currentUser,
         created: new Date(Date.now()),
-      },
-    });
-    messageInput.current.value = "";
+      });
+
+      dispatch({
+        type: "SEND_MESSAGE",
+        payload: {
+          text: messageInput.current.value,
+          author: localStorage.getItem("id"),
+          created: new Date(Date.now()),
+        },
+      });
+      messageInput.current.value = "";
+    }
   };
 
   const findChatMessages = async (secondUserId, name) => {
@@ -186,6 +188,7 @@ export const Chat = () => {
               }
               className={classes.formInput}
               ref={messageInput}
+              onKeyPress={currentUser ? sentMessage : null}
             ></textarea>
             <button onClick={currentUser ? sentMessage : null}>
               <AiOutlineSend className={classes.sendIcon}></AiOutlineSend>
