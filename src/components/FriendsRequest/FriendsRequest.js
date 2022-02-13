@@ -14,6 +14,7 @@ export const FriendsRequest = () => {
 
   useEffect(() => {
     data && setFriendsRequests(data.data.friendsRequests);
+    data && console.log(friendsRequests);
   }, [data]);
 
   const acceptRequestHandler = async (index, targetID) => {
@@ -27,8 +28,10 @@ export const FriendsRequest = () => {
         body: JSON.stringify({ targetID: targetID }),
       });
       const data = await response.json();
+
       setFriendsRequests(prevState => {
-        return [...prevState.splice(index, 1)];
+        // return [...prevState.splice(index, 1)];
+        return [...prevState.filter(e => e._id !== targetID)];
       });
     } catch (err) {
       console.log(err);
