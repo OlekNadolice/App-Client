@@ -17,7 +17,10 @@ export const FriendsRequest = () => {
     data && console.log(friendsRequests);
   }, [data]);
 
-  const acceptRequestHandler = async (index, targetID) => {
+  const acceptRequestHandler = async targetID => {
+    setFriendsRequests(prevState => {
+      return [...prevState.filter(e => e._id !== targetID)];
+    });
     try {
       const response = await fetch(`${server}/users/acceptRequest`, {
         method: "POST",
@@ -28,16 +31,15 @@ export const FriendsRequest = () => {
         body: JSON.stringify({ targetID: targetID }),
       });
       const data = await response.json();
-
-      setFriendsRequests(prevState => {
-        return [...prevState.filter(e => e._id !== targetID)];
-      });
     } catch (err) {
       console.log(err);
     }
   };
 
-  const declineRequestHandler = async (index, targetID) => {
+  const declineRequestHandler = async targetID => {
+    setFriendsRequests(prevState => {
+      return [...prevState.filter(e => e._id !== targetID)];
+    });
     try {
       const response = await fetch(`${server}/users/declineRequest`, {
         method: "POST",
@@ -48,9 +50,6 @@ export const FriendsRequest = () => {
         body: JSON.stringify({ targetID: targetID }),
       });
       const data = await response.json();
-      setFriendsRequests(prevState => {
-        return [...prevState.filter(e => e._id !== targetID)];
-      });
     } catch (err) {
       console.log(err);
     }
@@ -74,12 +73,10 @@ export const FriendsRequest = () => {
                 <h3>{element.name}</h3>
               </div>
               <div className={classes.btnContainer}>
-                <button onClick={() => declineRequestHandler(index, element._id)}>
-                  Delete
-                </button>
+                <button onClick={() => declineRequestHandler(element._id)}>Delete</button>
                 <button
                   id={element._id}
-                  onClick={() => acceptRequestHandler(index, element._id)}
+                  onClick={() => acceptRequestHandler(element._id)}
                 >
                   Accept
                 </button>
