@@ -30,7 +30,6 @@ export const FriendsRequest = () => {
       const data = await response.json();
 
       setFriendsRequests(prevState => {
-        // return [...prevState.splice(index, 1)];
         return [...prevState.filter(e => e._id !== targetID)];
       });
     } catch (err) {
@@ -50,7 +49,7 @@ export const FriendsRequest = () => {
       });
       const data = await response.json();
       setFriendsRequests(prevState => {
-        return [...prevState.splice(index, 1)];
+        return [...prevState.filter(e => e._id !== targetID)];
       });
     } catch (err) {
       console.log(err);
