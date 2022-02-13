@@ -21,14 +21,13 @@
 .sidebar > div {
   display: flex;
   flex-direction: column;
-  /* background-color: red; */
+
   cursor: pointer;
   align-items: center;
   position: relative;
   padding: 10px 15px;
 
   gap: 5px;
-  /* width: 100%; */
 }
 
 .sidebar > div > span {
@@ -149,7 +148,7 @@
 
 .chatForm {
   height: 15%;
-  /* background-color: red; */
+  min-height: 80px;
   display: flex;
 }
 
@@ -190,7 +189,6 @@
     scrollbar-width: none;
     order: 0;
     border-bottom: 1px solid;
-    /* justify-content: space-around; */
   }
 
   .chatForm > button {
