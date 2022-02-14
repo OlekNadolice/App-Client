@@ -50,4 +50,4 @@ password: 123456
 <img src='./src/images/photo6.png'>
 <img src='./src/images/photo7.png'>
 <img src='./src/images/photo8.png'>
-<img src='./src/images/photo9.png'>
+<img src='./src/images/photo9.jpg'>
