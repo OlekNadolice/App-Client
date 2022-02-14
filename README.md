@@ -40,4 +40,14 @@ password: 123456
 
 - Overall I'm happy with this project, I learned a lot and I hope that my future projects will be even better.
 
-<!-- <img src='./src/images/photo2.png'> -->
+# Screenshots
+
+<img src='./src/images/photo1.png'>
+<img src='./src/images/photo2.png'>
+<img src='./src/images/photo3.png'>
+<img src='./src/images/photo4.png'>
+<img src='./src/images/photo5.png'>
+<img src='./src/images/photo6.png'>
+<img src='./src/images/photo7.png'>
+<img src='./src/images/photo8.png'>
+<img src='./src/images/photo9.png'>
