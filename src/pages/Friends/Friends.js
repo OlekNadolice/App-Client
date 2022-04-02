@@ -4,7 +4,7 @@ import classes from "./friends.module.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useQuery } from "hooks/imports";
 
-export const Friends = () => {
+const Friends = () => {
   const { id } = useParams();
   const [friends, setFriends] = useState([]);
   const server = process.env.REACT_APP_BACKEND_URL;
@@ -52,3 +52,5 @@ export const Friends = () => {
     </div>
   );
 };
+
+export default Friends;

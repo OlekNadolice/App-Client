@@ -5,3 +5,4 @@ export { Header } from "./Header/Header";
 export { Modal } from "./Modal/Modal";
 export { Question } from "./Question/Question";
 export { UserCard } from "./UserCard/UserCard";
+export { Loading } from "./Loading/Loading";

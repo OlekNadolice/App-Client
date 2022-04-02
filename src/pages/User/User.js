@@ -5,7 +5,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import classes from "./user.module.css";
 import { useQuery, useFetch, useDocumentTitle } from "hooks/imports";
 
-export function User() {
+function User() {
   const { socket } = useContext(authContext);
   const { id } = useParams();
   const request = useFetch();
@@ -110,3 +110,5 @@ export function User() {
     );
   }
 }
+
+export default User;

@@ -6,7 +6,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import ReactPaginate from "react-paginate";
 import { authContext } from "context/AuthContext";
 
-export function Home() {
+function Home() {
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
   const limit = 8;
@@ -81,3 +81,5 @@ export function Home() {
     </div>
   );
 }
+
+export default Home;

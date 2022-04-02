@@ -6,7 +6,7 @@ import comments, { data } from "./commentsData";
 import { useSpring, animated } from "react-spring";
 import { useDocumentTitle, useOnScreen } from "hooks/imports";
 
-export const Welcome = () => {
+const Welcome = () => {
   const fadeIn = useSpring({ from: { opacity: 0 }, to: { opacity: 1 } });
   const { setTarget, isVisible } = useOnScreen({ threshold: 0.8 });
   const { setTarget: setObserver, isVisible: visible } = useOnScreen({ threshold: 0.3 });
@@ -69,3 +69,5 @@ export const Welcome = () => {
     </div>
   );
 };
+
+export default Welcome;

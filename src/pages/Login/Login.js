@@ -5,7 +5,8 @@ import { useFetch, useDocumentTitle } from "hooks/imports";
 import style from "./login.module.css";
 
 import { FcGoogle } from "react-icons/fc";
-export function Login() {
+
+function Login() {
   const { setIsLoggedIn, setToken, setUserImage } = useContext(authContext);
   const [errorMessage, setErrorMessage] = useState("");
   const emailInputRef = useRef("");
@@ -72,3 +73,5 @@ export function Login() {
     </div>
   );
 }
+
+export default Login;

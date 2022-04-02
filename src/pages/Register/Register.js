@@ -4,7 +4,7 @@ import { useFetch, useDocumentTitle } from "hooks/imports";
 import classes from "./register.module.css";
 import { MdDone } from "react-icons/md";
 
-export function Register() {
+function Register() {
   const [error, setError] = useState([]);
   const nameInputRef = useRef("");
   const emailInputRef = useRef("");
@@ -80,3 +80,5 @@ export function Register() {
     </form>
   );
 }
+
+export default Register;

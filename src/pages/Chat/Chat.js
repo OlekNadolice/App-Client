@@ -7,7 +7,7 @@ import { AiOutlineSend } from "react-icons/ai";
 import chatReducer, { initialState } from "./chatReducer";
 import { toast } from "react-toastify";
 
-export const Chat = () => {
+const Chat = () => {
   const [state, dispatch] = useReducer(chatReducer, initialState);
   const { users, currentUser, currentUserName, message } = state;
   const messageInput = useRef("");
@@ -199,3 +199,5 @@ export const Chat = () => {
     );
   }
 };
+
+export default Chat;

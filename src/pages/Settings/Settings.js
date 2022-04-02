@@ -8,7 +8,7 @@ import classes from "./settings.module.css";
 import reducer, { formState } from "./settingsReducer";
 import { Modal } from "components";
 
-export function Settings() {
+function Settings() {
   const { setUserImage, setIsLoggedIn } = useContext(authContext);
   const [state, dispatch] = useReducer(reducer, formState);
   const { name, city, bio, submited, currentFormContent } = state;
@@ -171,3 +171,5 @@ export function Settings() {
     </div>
   );
 }
+
+export default Settings;

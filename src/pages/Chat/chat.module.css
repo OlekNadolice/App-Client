@@ -89,7 +89,7 @@
 .chatMessages {
   height: 85%;
   overflow-y: scroll;
-  scrollbar-width: none;
+
   display: flex;
   flex-direction: column;
   gap: 10px;
